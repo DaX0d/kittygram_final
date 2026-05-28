@@ -14,8 +14,9 @@ services:
       retries: 5
     volumes:
       - pg_data:/var/lib/postgresql/data
+
   backend:
-    build: ./backend/
+    image: girday/kittygram_backend:latest
     env_file: .env
     command: >
       sh -c "python manage.py migrate &&
@@ -27,13 +28,15 @@ services:
     volumes:
       - static:/app/collected_static
       - media:/app/media
+
   frontend:
-    build: ./frontend/
+    image: girday/kittygram_frontend:latest
     command: cp -r /app/build/. /static/
     volumes:
       - static:/static
+
   gateway:
-    build: ./nginx/
+    image: girday/kittygram_gateway:latest
     ports:
       - 9000:80
     depends_on:
